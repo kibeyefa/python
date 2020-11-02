@@ -13,6 +13,7 @@ green = (0, 255, 0)
 light_green = (0, 95, 0)
 yellow = (255, 255, 0)
 red = (255, 0, 0)
+winner = 0
 
 
 def create_board():
@@ -27,23 +28,26 @@ def drop_piece(piece):
    global row, column
    board[column][row] = piece
       
-def win_check(board, piece):
+def win_check(piece):
    # Horizontal wins 
-   if board[0][0] and board[0][1] and board[0][2] == piece or board[0][0] and board[1][0] and board[2][0]:
+   if board[0][0] == piece and board[0][1] == piece and board[0][2] == piece or board[0][0] == piece and board[1][0] == piece and board[2][0] == piece:
       return True
    
-   elif board[2][2] and board[1][2] and board[0][2] == piece or board[2][2] and board[2][1] and board[2][0]:
+   if board[2][2 ] == piece and board[1][2] == piece and board[0][2] == piece or board[2][2] == piece and board[2][1] == piece and board[2][0] == piece:
       return True
 
-   if board[1][0] and board[1][1] and board[1][2] == piece:
+   if board[1][0] == piece and board[1][1] == piece and board[1][2] == piece:
+      return True
+   
+   if board[0][1] == piece and board[1][1] == piece and board[2][1] == piece:
       return True
  
    ## Diagonal winning
    if board[1][1] != 0:
-      if board[1][1] and board[0][0] and board[2][2] == piece:
+      if board[1][1] == piece and board[0][0] == piece and board[2][2] == piece:
          return True
       
-      elif board[1][1] and board[0][2] and board[2][0] == piece:
+      elif board[1][1] == piece and board[0][2] == piece and board[2][0] == piece:
          return True
 
    
@@ -64,6 +68,7 @@ screen.fill(green)
 clock =  pygame.time.Clock()
 FPS =  60
 clock.tick(FPS)
+myfont = pygame.font.SysFont("serif", 70)
 
 
 while running:
@@ -138,8 +143,10 @@ while running:
                drop_piece(spot)
                
 
-            if win_check(board, piece):
+            if win_check(piece):
+               winner = 1
                print("Player 1 wins")
+               # running = False
             
             # print(event.pos)
 
@@ -168,14 +175,27 @@ while running:
                drop_piece(spot)
                
 
-            if win_check(board, piece):
+            if win_check(piece):
+               winner = 2
                print("Player 2 wins")
-
+               # running = False
             
          turn += 1  
          turn = turn % 2
          print(board)
    draw_board()
 
+   if winner == 1:
+      label = myfont.render("Player 1 wins", 1, (0,0,0))  
+      screen.blit(label, (100, 250))
+      pygame.display.update()
+      pygame.time.wait(2000)
+      running = False
    
+   if winner == 2:
+      label = myfont.render("Player 2 wins", 1, (0,0,0))  
+      screen.blit(label, (100, 250))
+      pygame.display.update()
+      pygame.time.wait(2000)
+      running = False
 pygame.quit()
