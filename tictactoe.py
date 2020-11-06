@@ -27,7 +27,11 @@ def not_valid_location(board, columnm, row):
 def drop_piece(piece):
    global row, column
    board[column][row] = piece
-      
+
+def draw_check():
+   if board[0][0] != 0 and board[0][1] != 0 and board[0][2] != 0 and board[1][0] != 0 and board[1][1] != 0 and board[1][2] != 0 and board[2][0] != 0 and board[2][1] != 0 and board[2][2] != 0:
+      return True
+
 def win_check(piece):
    # Horizontal wins 
    if board[0][0] == piece and board[0][1] == piece and board[0][2] == piece or board[0][0] == piece and board[1][0] == piece and board[2][0] == piece:
@@ -50,7 +54,7 @@ def win_check(piece):
       elif board[1][1] == piece and board[0][2] == piece and board[2][0] == piece:
          return True
 
-   
+
 def draw_board():
    pygame.draw.line(screen, light_green, (200 , 10), ( 200,HIEGHT - 10), 20)
    pygame.draw.line(screen, light_green, (420 , 10), ( 420,HIEGHT - 10), 20)
@@ -179,7 +183,7 @@ while running:
                winner = 2
                print("Player 2 wins")
                # running = False
-            
+
          turn += 1  
          turn = turn % 2
          print(board)
@@ -198,4 +202,12 @@ while running:
       pygame.display.update()
       pygame.time.wait(2000)
       running = False
+
+   if draw_check():
+      label = myfont.render("Draw", 1, (0,0,0)) 
+      screen.blit(label, (250, 250))
+      pygame.display.update()
+      pygame.time.wait(2000)
+      running = False
+
 pygame.quit()
